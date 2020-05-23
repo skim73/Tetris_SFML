@@ -1,0 +1,3 @@
+﻿  main.cpp
+c:\users\sabin\source\repos\tetris_sfml\tetris_sfml\main.cpp(20): warning C4101: 'options': unreferenced local variable
+  Tetris_SFML.vcxproj -> C:\Users\sabin\source\repos\Tetris_SFML\Debug\Tetris_SFML.exe
