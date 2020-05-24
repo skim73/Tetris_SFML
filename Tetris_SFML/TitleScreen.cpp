@@ -12,7 +12,7 @@ TitleScreen::TitleScreen()
 	menuCursor = 0;
 	levelCursor = 0;
 
-	menuRect.setSize(sf::Vector2f(680.0f, 310.0f));
+	menuRect.setSize(sf::Vector2f(720.0f, 310.0f));
 	menuRect.setFillColor(sf::Color(0, 0, 0, 155));
 	menuRect.setPosition(440.0f, 380.0f);
 	menuItems.push_back(sf::Text("START : at level 0", square721extended, 50));

@@ -28,6 +28,9 @@ int main()
 	music.play();
 	music.setLoop(true);
 
+	sf::Sound sfx;
+	sfx.setVolume(100.f);
+
 	sf::Clock programClock;
 	sf::Clock joyHold;
 
@@ -38,6 +41,7 @@ int main()
 		window.clear();
 		window.draw(background);
 
+		sf::Event event;
 		switch (state)
 		{
 			case ProgramState::MENU:
@@ -47,12 +51,11 @@ int main()
 					window.draw(text);
 				}
 
-				sf::Event event;
 				while (window.pollEvent(event))
 				{
 					if (event.type == sf::Event::KeyPressed)
 					{
-						if (++holdIndex % 3 == 1)
+						if (++holdIndex % 2)
 						{
 							switch (event.key.code)
 							{
@@ -111,13 +114,47 @@ int main()
 				break;
 
 			case ProgramState::OPTIONS:
-				break;
+				window.draw(options.getRectangle());
+				window.draw(options.getMusicVolText());
+				window.draw(options.getMusicSlider());
+				window.draw(options.getSFXVolText());
+				window.draw(options.getSFXSlider());
+				window.draw(options.getBackText());
 
+				while (window.pollEvent(event))
+				{
+					if (event.type == sf::Event::KeyPressed)
+					{
+						if (++holdIndex % 2)
+						{
+							switch (event.key.code)
+							{
+								case sf::Keyboard::Key::Up:
+									options.moveCursorUp();
+									break;
+								case sf::Keyboard::Key::Down:
+									options.moveCursorDown();
+									break;
+								case sf::Keyboard::Key::Left:
+									options.moveSliderLeft(music, sfx);
+									break;
+								case sf::Keyboard::Key::Right:
+									options.moveSliderRight(music, sfx);
+									break;
+								case sf::Keyboard::Key::Enter:
+									if (options.getCursor() == 2)
+										state = ProgramState::MENU;
+							}
+						}
+					}
+					else if (event.type == sf::Event::KeyReleased)
+						holdIndex = 0;
+					break;
+				}
 			case ProgramState::HIGHSCORE:
 				break;
 		}
 
-		sf::Event event;
 		if (window.pollEvent(event))
 		{
 			switch (event.type)
@@ -125,7 +162,6 @@ int main()
 				case sf::Event::Closed:
 					window.close();
 					break;
-
 				case sf::Event::Resized:
 					window.setSize(sf::Vector2u(1600, 900));
 					std::cout << "This program produces painfully blurred images if resized. "
@@ -136,9 +172,7 @@ int main()
 					break;
 			}
 		}
-
 		window.display();
-
 	}
 
 	return 0;
