@@ -42,6 +42,8 @@ int main()
 		window.draw(background);
 
 		sf::Event event;
+
+		
 		switch (state)
 		{
 			case ProgramState::MENU:
@@ -92,6 +94,8 @@ int main()
 					}
 					else if (event.type == sf::Event::KeyReleased)
 						holdIndex = 0;
+					else if (event.type == sf::Event::Closed)
+						window.close();
 				}
 
 				break;
@@ -149,29 +153,14 @@ int main()
 					}
 					else if (event.type == sf::Event::KeyReleased)
 						holdIndex = 0;
+					else if (event.type == sf::Event::Closed)
+						window.close();
 					break;
 				}
 			case ProgramState::HIGHSCORE:
 				break;
 		}
 
-		if (window.pollEvent(event))
-		{
-			switch (event.type)
-			{
-				case sf::Event::Closed:
-					window.close();
-					break;
-				case sf::Event::Resized:
-					window.setSize(sf::Vector2u(1600, 900));
-					std::cout << "This program produces painfully blurred images if resized. "
-						<< "Hence, I am overriding all resizes of the application.\n"
-						<< "You are running the version that is optimal for 1080p (Full HD) displays.\n\n"
-						<< "****  Go to [github.com/johnscolidge/Tetris_SFML] to download the version of "
-						<< "Tetris_SFML\n      that has the optimal resolution for your display.  ****\n\n\n\n";
-					break;
-			}
-		}
 		window.display();
 	}
 
