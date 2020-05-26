@@ -16,11 +16,10 @@ int main()
 
 	ProgramState state = ProgramState::MENU;
 
-	TitleScreen title;
-	Options options;
+	GUI *currentGUI;
 
-	sf::RectangleShape background(sf::Vector2f(1600, 900));
-	background.setTexture(title.getBackground());
+	TitleScreen title;
+	currentGUI = &title;
 
 	sf::Music music;
 	music.openFromFile(title.getMusic());
@@ -31,6 +30,8 @@ int main()
 	sf::Sound sfx;
 	sfx.setVolume(100.f);
 
+	Options options(&music, &sfx);
+
 	sf::Clock programClock;
 	sf::Clock joyHold;
 
@@ -39,126 +40,68 @@ int main()
 	while (window.isOpen())
 	{
 		window.clear();
-		window.draw(background);
+		for (sf::Drawable *thing : currentGUI->getDrawableComponents())
+			window.draw(*thing);
 
 		sf::Event event;
-
-		
-		switch (state)
+		while (window.pollEvent(event))
 		{
-			case ProgramState::MENU:
-				window.draw(title.getMenuRect());
-				for (sf::Text text : title.getMenuItems())
+			if (event.type == sf::Event::KeyPressed && ++holdIndex % 2)
+			{
+				switch (event.key.code)
 				{
-					window.draw(text);
-				}
-
-				while (window.pollEvent(event))
-				{
-					if (event.type == sf::Event::KeyPressed)
-					{
-						if (++holdIndex % 2)
+					case sf::Keyboard::Up:
+						currentGUI->upPressed();
+						break;
+					case sf::Keyboard::Down:
+						currentGUI->downPressed();
+						break;
+					case sf::Keyboard::Left:
+						currentGUI->leftPressed();
+						break;
+					case sf::Keyboard::Right:
+						currentGUI->rightPressed();
+						break;
+					case sf::Keyboard::Escape:
+						currentGUI->escPressed();
+						break;
+					case sf::Keyboard::Z:
+						currentGUI->zPressed();
+						break;
+					case sf::Keyboard::X:
+						currentGUI->xPressed();
+						break;
+					case sf::Keyboard::Enter:
+						if (state == ProgramState::MENU)
 						{
-							switch (event.key.code)
+							switch (currentGUI->enterPressed())
 							{
-								case sf::Keyboard::Key::Up:
-									title.moveCursorUp();
+								case 0:
+									state = ProgramState::LOAD;
 									break;
-								case sf::Keyboard::Key::Down:
-									title.moveCursorDown();
+								case 1:
+									state = ProgramState::OPTIONS;
+									currentGUI = &options;
 									break;
-								case sf::Keyboard::Key::Left:
-									title.changeLevelDown();
+								case 2:
 									break;
-								case sf::Keyboard::Key::Right:
-									title.changeLevelUp();
-									break;
-								case sf::Keyboard::Key::Enter:
-									switch (title.getMenuCursor())
-									{
-										case 0:
-											state = ProgramState::LOAD;
-											programClock.restart();
-											break;
-
-										case 1:
-											state = ProgramState::OPTIONS;
-											break;
-
-										case 2:
-											state = ProgramState::HIGHSCORE;
-											break;
-									}
 							}
 						}
-					}
-					else if (event.type == sf::Event::KeyReleased)
-						holdIndex = 0;
-					else if (event.type == sf::Event::Closed)
-						window.close();
-				}
-
-				break;
-
-			case ProgramState::LOAD:
-				window.draw(title.getLoadingRect());
-				window.draw(title.getLoadingText());
-				if (music.getVolume() > 1)
-					music.setVolume(music.getVolume() - 1);
-				else
-					music.stop();
-				if (programClock.getElapsedTime() >= sf::seconds(3.0f))
-				{
-					state = ProgramState::GAME;
-				}
-				break;
-
-			case ProgramState::GAME:
-
-				break;
-
-			case ProgramState::OPTIONS:
-				window.draw(options.getRectangle());
-				window.draw(options.getMusicVolText());
-				window.draw(options.getMusicSlider());
-				window.draw(options.getSFXVolText());
-				window.draw(options.getSFXSlider());
-				window.draw(options.getBackText());
-
-				while (window.pollEvent(event))
-				{
-					if (event.type == sf::Event::KeyPressed)
-					{
-						if (++holdIndex % 2)
+						else if (state == ProgramState::OPTIONS && currentGUI->enterPressed())
 						{
-							switch (event.key.code)
-							{
-								case sf::Keyboard::Key::Up:
-									options.moveCursorUp();
-									break;
-								case sf::Keyboard::Key::Down:
-									options.moveCursorDown();
-									break;
-								case sf::Keyboard::Key::Left:
-									options.moveSliderLeft(music, sfx);
-									break;
-								case sf::Keyboard::Key::Right:
-									options.moveSliderRight(music, sfx);
-									break;
-								case sf::Keyboard::Key::Enter:
-									if (options.getCursor() == 2)
-										state = ProgramState::MENU;
-							}
+							currentGUI = &title;
+							state = ProgramState::MENU;
 						}
-					}
-					else if (event.type == sf::Event::KeyReleased)
-						holdIndex = 0;
-					else if (event.type == sf::Event::Closed)
-						window.close();
-					break;
 				}
-			case ProgramState::HIGHSCORE:
-				break;
+			}
+			else if (event.type == sf::Event::KeyReleased)
+			{
+				holdIndex = 0;
+			}
+			else if (event.type == sf::Event::Closed)
+			{
+				window.close();
+			}
 		}
 
 		window.display();

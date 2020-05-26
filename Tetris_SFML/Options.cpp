@@ -1,8 +1,15 @@
 #include "Options.h"
 #include <algorithm>
 
-Options::Options()
+Options::Options(sf::Music *music, sf::Sound *sound)
 {
+	bgm = music;
+	sfx = sound;
+
+	bgTexture.loadFromFile("img/backgrounds/title.png");
+	background.setTexture(&bgTexture);
+	background.setSize(sf::Vector2f(1600.f, 900.f));
+
 	rectangle.setFillColor(sf::Color::Black);
 	rectangle.setSize(sf::Vector2f(880.0f, 500.0f));
 	rectangle.setPosition(360.0f, 200.0f);
@@ -36,9 +43,17 @@ Options::Options()
 	backText.setFillColor(sf::Color::White);
 
 	cursor = 0;
+
+	drawableComponents.push_back(&background);
+	drawableComponents.push_back(&rectangle);
+	drawableComponents.push_back(&musicVolText);
+	drawableComponents.push_back(&musicSlider);
+	drawableComponents.push_back(&sfxVolText);
+	drawableComponents.push_back(&sfxSlider);
+	drawableComponents.push_back(&backText);
 }
 
-void Options::moveCursorUp()
+void Options::upPressed()
 {
 	if (--cursor < 0)
 		cursor = 0;
@@ -57,7 +72,7 @@ void Options::moveCursorUp()
 	}
 }
 
-void Options::moveCursorDown()
+void Options::downPressed()
 {
 	if (++cursor > 2)
 		cursor = 2;
@@ -76,46 +91,68 @@ void Options::moveCursorDown()
 	}
 }
 
-void Options::moveSliderLeft(sf::Music& music, sf::Sound& sfx)
+void Options::leftPressed()
 {
 	if (!cursor)
 	{
-		if (music.getVolume() > 0.f)
+		if (bgm->getVolume() > 0.f)
 		{
 			sf::Vector2f size = musicSlider.getSize();
-			music.setVolume(std::max(music.getVolume() - 5.0f, 0.0f));
-			musicSlider.setSize(sf::Vector2f(music.getVolume() * 8, size.y));
+			bgm->setVolume(std::max(bgm->getVolume() - 5.0f, 0.0f));
+			musicSlider.setSize(sf::Vector2f(bgm->getVolume() * 8, size.y));
 		}
 	}
 	else if (cursor == 1)
 	{
-		if (sfx.getVolume() > 0.f)
+		if (sfx->getVolume() > 0.f)
 		{
 			sf::Vector2f size = sfxSlider.getSize();
-			sfx.setVolume(std::max(sfx.getVolume() - 5.0f, 0.0f));
-			sfxSlider.setSize(sf::Vector2f(sfx.getVolume() * 8, size.y));
+			sfx->setVolume(std::max(sfx->getVolume() - 5.0f, 0.0f));
+			sfxSlider.setSize(sf::Vector2f(sfx->getVolume() * 8, size.y));
+			sfx->play();
 		}
 	}
 }
 
-void Options::moveSliderRight(sf::Music& music, sf::Sound& sfx)
+void Options::rightPressed()
 {
 	if (!cursor)
 	{
-		if (music.getVolume() < 100.f)
+		if (bgm->getVolume() < 100.f)
 		{
 			sf::Vector2f size = musicSlider.getSize();
-			music.setVolume(std::min(music.getVolume() + 5.0f, 100.0f));
-			musicSlider.setSize(sf::Vector2f(music.getVolume() * 8, size.y));
+			bgm->setVolume(std::min(bgm->getVolume() + 5.0f, 100.0f));
+			musicSlider.setSize(sf::Vector2f(bgm->getVolume() * 8, size.y));
 		}
 	}
 	else if (cursor == 1)
 	{
-		if (sfx.getVolume() < 100.f)
+		if (sfx->getVolume() < 100.f)
 		{
 			sf::Vector2f size = sfxSlider.getSize();
-			sfx.setVolume(std::min(sfx.getVolume() + 5.0f, 100.0f));
-			sfxSlider.setSize(sf::Vector2f(sfx.getVolume() * 8, size.y));
+			sfx->setVolume(std::min(sfx->getVolume() + 5.0f, 100.0f));
+			sfxSlider.setSize(sf::Vector2f(sfx->getVolume() * 8, size.y));
+			sfx->play();
 		}
 	}
+}
+
+short Options::enterPressed()
+{
+	return cursor == 2;
+}
+
+void Options::escPressed()
+{
+	return;
+}
+
+void Options::zPressed()
+{
+	leftPressed();
+}
+
+void Options::xPressed()
+{
+	rightPressed();
 }
