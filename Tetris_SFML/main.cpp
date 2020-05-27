@@ -2,6 +2,7 @@
 #include <SFML/Audio.hpp>
 #include "TitleScreen.h"
 #include "Options.h"
+#include "LoadingScreen.h"
 
 #include <iostream>
 
@@ -20,6 +21,8 @@ int main()
 
 	TitleScreen title;
 	currentGUI = &title;
+
+	LoadingScreen loading;
 
 	sf::Music music;
 	music.openFromFile(title.getMusic());
@@ -40,8 +43,23 @@ int main()
 	while (window.isOpen())
 	{
 		window.clear();
-		for (sf::Drawable *thing : currentGUI->getDrawableComponents())
-			window.draw(*thing);
+		window.draw(*currentGUI);
+
+		if (state == ProgramState::LOAD)
+		{
+			if (music.getVolume() > 1)
+				music.setVolume(music.getVolume() - 1.f);
+			else
+				music.stop();
+			if (programClock.getElapsedTime() > sf::seconds(3.f))
+			{
+				if (currentGUI->fadeAway())
+				{
+					programClock.restart();
+					state = ProgramState::GAME;
+				}
+			}
+		}
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -78,6 +96,8 @@ int main()
 							{
 								case 0:
 									state = ProgramState::LOAD;
+									currentGUI = &loading;
+									programClock.restart();
 									break;
 								case 1:
 									state = ProgramState::OPTIONS;

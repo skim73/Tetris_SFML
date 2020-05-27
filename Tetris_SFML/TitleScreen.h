@@ -27,9 +27,6 @@ public:
 	void leftPressed() override;
 	void rightPressed() override;
 	short enterPressed() override;
-	void escPressed() override;
-	void zPressed() override;
-	void xPressed() override;
 
 	std::string& getMusic()
 	{
@@ -40,4 +37,7 @@ public:
 	{
 		return levelCursor;
 	}
+
+private:
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

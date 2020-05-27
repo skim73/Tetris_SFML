@@ -21,9 +21,6 @@ TitleScreen::TitleScreen()
 	menuItems.push_back(sf::Text("OPTIONS", square721extended, 50));
 	menuItems.push_back(sf::Text("HIGH SCORES", square721extended, 50));
 
-	drawableComponents.push_back(&backgroundRect);
-	drawableComponents.push_back(&menuRect);
-
 	for (int i = 0; i < 3; ++i)
 	{
 		menuItems[i].setFillColor(i ? sf::Color::White : sf::Color::Cyan);
@@ -31,7 +28,6 @@ TitleScreen::TitleScreen()
 		menuItems[i].setOutlineThickness(2);
 		menuItems[i].setOutlineColor(sf::Color::Black);
 		menuItems[i].setPosition(450.0f, 400.0f + i*100);
-		drawableComponents.push_back(&menuItems[i]);
 	}
 }
 
@@ -80,17 +76,10 @@ short TitleScreen::enterPressed()
 	return menuCursor;
 }
 
-void TitleScreen::escPressed()
+void TitleScreen::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	return;
-}
-
-void TitleScreen::zPressed()
-{
-	return;
-}
-
-void TitleScreen::xPressed()
-{
-	return;
+	target.draw(backgroundRect);
+	target.draw(menuRect);
+	for (sf::Text text : menuItems)
+		target.draw(text);
 }

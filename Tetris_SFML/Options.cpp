@@ -43,14 +43,6 @@ Options::Options(sf::Music *music, sf::Sound *sound)
 	backText.setFillColor(sf::Color::White);
 
 	cursor = 0;
-
-	drawableComponents.push_back(&background);
-	drawableComponents.push_back(&rectangle);
-	drawableComponents.push_back(&musicVolText);
-	drawableComponents.push_back(&musicSlider);
-	drawableComponents.push_back(&sfxVolText);
-	drawableComponents.push_back(&sfxSlider);
-	drawableComponents.push_back(&backText);
 }
 
 void Options::upPressed()
@@ -142,11 +134,6 @@ short Options::enterPressed()
 	return cursor == 2;
 }
 
-void Options::escPressed()
-{
-	return;
-}
-
 void Options::zPressed()
 {
 	leftPressed();
@@ -155,4 +142,15 @@ void Options::zPressed()
 void Options::xPressed()
 {
 	rightPressed();
+}
+
+void Options::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.draw(background);
+	target.draw(rectangle);
+	target.draw(musicVolText);
+	target.draw(musicSlider);
+	target.draw(sfxVolText);
+	target.draw(sfxSlider);
+	target.draw(backText);
 }

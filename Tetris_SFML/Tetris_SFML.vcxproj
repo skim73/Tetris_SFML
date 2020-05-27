@@ -131,14 +131,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mino.cpp" />
     <ClCompile Include="Options.cpp" />
+    <ClCompile Include="TetrisGame.cpp" />
+    <ClCompile Include="Tetromino.cpp" />
     <ClCompile Include="TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="Mino.h" />
     <ClInclude Include="Options.h" />
+    <ClInclude Include="GUI.h" />
+    <ClInclude Include="TetrisGame.h" />
+    <ClInclude Include="Tetromino.h" />
     <ClInclude Include="TitleScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

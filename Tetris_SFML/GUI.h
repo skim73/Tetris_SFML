@@ -2,23 +2,20 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-class GUI
+class GUI : public sf::Drawable
 {
-protected:
-	std::vector<sf::Drawable*> drawableComponents;
-
 public:
-	virtual void upPressed() = 0;
-	virtual void downPressed() = 0;
-	virtual void leftPressed() = 0;
-	virtual void rightPressed() = 0;
-	virtual short enterPressed() = 0;
-	virtual void escPressed() = 0;
-	virtual void zPressed() = 0;
-	virtual void xPressed() = 0;
+	virtual void upPressed() { return; }
+	virtual void downPressed() { return; }
+	virtual void leftPressed() { return; }
+	virtual void rightPressed() { return; }
+	virtual short enterPressed() { return 0; }
+	virtual void escPressed() { return; }
+	virtual void zPressed() { return; }
+	virtual void xPressed() { return; }
 
-	std::vector<sf::Drawable*> getDrawableComponents()
+	virtual bool fadeAway()
 	{
-		return drawableComponents;
+		return 0;
 	}
 };
