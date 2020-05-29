@@ -4,8 +4,7 @@
 struct Point
 {
 	short row, col;
-
-	Point() : row(0), col(4) {}
+	Point() : row(0), col(0) {}
 	Point(short r, short c) : row(r), col(c) {}
 };
 
@@ -17,7 +16,7 @@ class Mino : public sf::Drawable
 	Point point;
 
 public:
-	Mino(short x, short y, sf::Color color);
+	Mino(short r, short c, sf::Color color);
 
 	void setColor(sf::Color color);
 	void setPoint(short r, short c);
