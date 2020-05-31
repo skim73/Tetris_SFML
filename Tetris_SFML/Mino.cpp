@@ -24,6 +24,12 @@ void Mino::setPoint(short r, short c)
 	sprite.setPosition(584.f + r * 36.f, 54.f + c * 36.f);	// definitely gonna change this
 }
 
+void Mino::setPoint(Point p)
+{
+	point.row = p.row;
+	point.col = p.col;
+}
+
 void Mino::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(sprite);

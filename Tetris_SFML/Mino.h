@@ -6,6 +6,15 @@ struct Point
 	short row, col;
 	Point() : row(0), col(0) {}
 	Point(short r, short c) : row(r), col(c) {}
+
+	Point operator+ (Point other)
+	{
+		return Point(this->row + other.row, this->col + other.col);
+	}
+	Point operator- (Point other)
+	{
+		return Point(this->row - other.row, this->col - other.col);
+	}
 };
 
 class Mino : public sf::Drawable
@@ -20,6 +29,7 @@ public:
 
 	void setColor(sf::Color color);
 	void setPoint(short r, short c);
+	void setPoint(Point p);
 
 	Point getPoint()
 	{

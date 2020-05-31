@@ -1,201 +1,143 @@
 #include "Tetromino.h"
 
-void Tetromino::moveLeft()
+Tetromino::Tetromino(char type)
 {
-	for (Mino mino : minoes)
+	rotation = 0;
+	this->type = type;
+	switch (type)
 	{
-		Point p = mino.getPoint();
-		mino.setPoint(p.row, p.col - 1);
+		case 'L':
+			minoes.push_back(new Mino(0, 0, sf::Color::Magenta));
+			minoes.push_back(new Mino(0, -1, sf::Color::Magenta));
+			minoes.push_back(new Mino(0, 1, sf::Color::Magenta));
+			minoes.push_back(new Mino(1, -1, sf::Color::Magenta));
+			break;
+		case 'J':
+			minoes.push_back(new Mino(0, 0, sf::Color::Yellow));
+			minoes.push_back(new Mino(0, -1, sf::Color::Yellow));
+			minoes.push_back(new Mino(0, 1, sf::Color::Yellow));
+			minoes.push_back(new Mino(1, 1, sf::Color::Yellow));
+			break;
+		case 'T':
+			minoes.push_back(new Mino(0, 0, sf::Color::Green));
+			minoes.push_back(new Mino(0, -1, sf::Color::Green));
+			minoes.push_back(new Mino(0, 1, sf::Color::Green));
+			minoes.push_back(new Mino(1, 0, sf::Color::Green));
+			break;
+		case 'O':
+			minoes.push_back(new Mino(0, 0, sf::Color::Blue));
+			minoes.push_back(new Mino(0, 1, sf::Color::Blue));
+			minoes.push_back(new Mino(1, 0, sf::Color::Blue));
+			minoes.push_back(new Mino(1, 1, sf::Color::Blue));
+			break;
+		case 'Z':
+			minoes.push_back(new Mino(0, 0, sf::Color(255, 128, 0)));
+			minoes.push_back(new Mino(0, -1, sf::Color(255, 128, 0)));
+			minoes.push_back(new Mino(1, 0, sf::Color(255, 128, 0)));
+			minoes.push_back(new Mino(1, 1, sf::Color(255, 128, 0)));
+			break;
+		case 'S':
+			minoes.push_back(new Mino(0, 0, sf::Color::Cyan));
+			minoes.push_back(new Mino(0, 1, sf::Color::Cyan));
+			minoes.push_back(new Mino(1, 0, sf::Color::Cyan));
+			minoes.push_back(new Mino(1, -1, sf::Color::Cyan));
+			break;
+		case 'I':
+			minoes.push_back(new Mino(0, 0, sf::Color::Red));
+			minoes.push_back(new Mino(0, -1, sf::Color::Red));
+			minoes.push_back(new Mino(0, 1, sf::Color::Red));
+			minoes.push_back(new Mino(0, 2, sf::Color::Red));
 	}
 }
 
-void Tetromino::moveRight()
+void Tetromino::moveLeft(short x)
 {
-	for (Mino mino : minoes)
+	for (Mino *mino : minoes)
 	{
-		Point p = mino.getPoint();
-		mino.setPoint(p.row, p.col + 1);
+		mino->setPoint(mino->getPoint() - Point(0, x));
 	}
 }
 
-void Tetromino::moveDown()
+void Tetromino::moveRight(short x)
 {
-	for (Mino mino : minoes)
+	for (Mino *mino : minoes)
 	{
-		Point p = mino.getPoint();
-		mino.setPoint(p.row + 1, p.col);
+		mino->setPoint(mino->getPoint() + Point(0, x));
+	}
+}
+
+void Tetromino::moveDown(short y)
+{
+	for (Mino *mino : minoes)
+	{
+		mino->setPoint(mino->getPoint() + Point(y, 0));
+	}
+}
+
+void Tetromino::resetPosition()
+{
+	for (Mino *mino : minoes)
+	{
+		mino->setPoint(0, 0);
 	}
 }
 
 void Tetromino::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	for (Mino mino : minoes)
+	for (Mino *mino : minoes)
 	{
-		target.draw(mino);
+		target.draw(*mino);
 	}
 }
 
 void Tetromino::rotateLeft()
 {
-	for (int i = 1; i < 4; ++i)
+	switch (type)
 	{
-		short r = minoes[i].getPoint().row, c = minoes[i].getPoint().col;
-		minoes[i].setPoint(-c, r);
+		case 'L':
+		case 'J':
+		case 'T':
+			for (int i = 1; i < 4; ++i)
+			{
+				short r = minoes[i]->getPoint().row, c = minoes[i]->getPoint().col;
+				minoes[i]->setPoint(-c, r);
+			}
+			break;
+		case 'Z':
+		case 'S':
+		case 'I':
+			for (int i = 1; i < 4; ++i)
+			{
+				short r = minoes[i]->getPoint().row, c = minoes[i]->getPoint().col;
+				Point transform = rotation ? Point(-c, r) : Point(c, -r);
+				minoes[i]->setPoint(-c, r);
+			}
+			rotation = !rotation;
 	}
 }
 
 void Tetromino::rotateRight()
 {
-	for (int i = 1; i < 4; ++i)
+	switch (type)
 	{
-		short r = minoes[i].getPoint().row, c = minoes[i].getPoint().col;
-		minoes[i].setPoint(c, -r);
+		case 'L':
+		case 'J':
+		case 'T':
+			for (int i = 1; i < 4; ++i)
+			{
+				short r = minoes[i]->getPoint().row, c = minoes[i]->getPoint().col;
+				minoes[i]->setPoint(c, -r);
+			}
+			break;
+		case 'Z':
+		case 'S':
+		case 'I':
+			for (int i = 1; i < 4; ++i)
+			{
+				short r = minoes[i]->getPoint().row, c = minoes[i]->getPoint().col;
+				Point transform = rotation ? Point(-c, r) : Point(c, -r);
+				minoes[i]->setPoint(-c, r);
+			}
+			rotation = !rotation;
 	}
-}
-
-TetrominoL::TetrominoL()
-{
-	minoes.push_back(Mino(0, 0, sf::Color::Magenta));
-	minoes.push_back(Mino(0, -1, sf::Color::Magenta));
-	minoes.push_back(Mino(0, 1, sf::Color::Magenta));
-	minoes.push_back(Mino(1, -1, sf::Color::Magenta));
-}
-
-TetrominoJ::TetrominoJ()
-{
-	minoes.push_back(Mino(0, 0, sf::Color::Yellow));
-	minoes.push_back(Mino(0, -1, sf::Color::Yellow));
-	minoes.push_back(Mino(0, 1, sf::Color::Yellow));
-	minoes.push_back(Mino(1, 1, sf::Color::Yellow));
-}
-
-TetrominoT::TetrominoT()
-{
-	minoes.push_back(Mino(0, 0, sf::Color::Green));
-	minoes.push_back(Mino(0, -1, sf::Color::Green));
-	minoes.push_back(Mino(0, 1, sf::Color::Green));
-	minoes.push_back(Mino(1, 0, sf::Color::Green));
-}
-
-TetrominoO::TetrominoO()
-{
-	minoes.push_back(Mino(0, 0, sf::Color::Blue));
-	minoes.push_back(Mino(0, 1, sf::Color::Blue));
-	minoes.push_back(Mino(1, 0, sf::Color::Blue));
-	minoes.push_back(Mino(1, 1, sf::Color::Blue));
-}
-
-void TetrominoO::rotateLeft()
-{
-	return;
-}
-
-void TetrominoO::rotateRight()
-{
-	return;
-}
-
-TetrominoZ::TetrominoZ()
-{
-	rotated = 0;
-	minoes.push_back(Mino(0, 0, sf::Color(255, 128, 0)));
-	minoes.push_back(Mino(0, -1, sf::Color(255, 128, 0)));
-	minoes.push_back(Mino(1, 0, sf::Color(255, 128, 0)));
-	minoes.push_back(Mino(1, 1, sf::Color(255, 128, 0)));
-}
-
-void TetrominoZ::rotateLeft()
-{
-	if (rotated)
-	{
-		Tetromino::rotateLeft();
-	}
-	else
-	{
-		Tetromino::rotateRight();
-	}
-	rotated = !rotated;
-}
-
-void TetrominoZ::rotateRight()
-{
-	if (rotated)
-	{
-		Tetromino::rotateLeft();
-	}
-	else
-	{
-		Tetromino::rotateRight();
-	}
-	rotated = !rotated;
-}
-
-TetrominoS::TetrominoS()
-{
-	rotated = 0;
-	minoes.push_back(Mino(0, 0, sf::Color::Cyan));
-	minoes.push_back(Mino(0, 1, sf::Color::Cyan));
-	minoes.push_back(Mino(1, 0, sf::Color::Cyan));
-	minoes.push_back(Mino(1, -1, sf::Color::Cyan));
-}
-
-void TetrominoS::rotateLeft()
-{
-	if (rotated)
-	{
-		Tetromino::rotateLeft();
-	}
-	else
-	{
-		Tetromino::rotateRight();
-	}
-	rotated = !rotated;
-}
-
-void TetrominoS::rotateRight()
-{
-	if (rotated)
-	{
-		Tetromino::rotateLeft();
-	}
-	else
-	{
-		Tetromino::rotateRight();
-	}
-	rotated = !rotated;
-}
-
-TetrominoI::TetrominoI()
-{
-	rotated = 0;
-	minoes.push_back(Mino(0, 0, sf::Color::Red));
-	minoes.push_back(Mino(0, -1, sf::Color::Red));
-	minoes.push_back(Mino(0, 1, sf::Color::Red));
-	minoes.push_back(Mino(0, 2, sf::Color::Red));
-}
-
-void TetrominoI::rotateLeft()
-{
-	if (rotated)
-	{
-		Tetromino::rotateLeft();
-	}
-	else
-	{
-		Tetromino::rotateRight();
-	}
-	rotated = !rotated;
-}
-
-void TetrominoI::rotateRight()
-{
-	if (rotated)
-	{
-		Tetromino::rotateLeft();
-	}
-	else
-	{
-		Tetromino::rotateRight();
-	}
-	rotated = !rotated;
 }
