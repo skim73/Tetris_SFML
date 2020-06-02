@@ -3,12 +3,16 @@
 #include "Tetromino.h"
 #include "Mino.h"
 #include "GUI.h"
+#include "PauseScreen.h"
 #include <SFML/Audio.hpp>
 
 #define MATRIX(row, col) ((row+2)*10 + (col))
 
 class TetrisGame : public GUI
 {
+	sf::RectangleShape backgroundRect;
+	sf::Texture backgroundPicture;
+
 	sf::RectangleShape matrixPicture;
 	std::vector<sf::Sprite> frame;
 
@@ -16,8 +20,8 @@ class TetrisGame : public GUI
 	sf::RectangleShape nextBlockRect;
 	sf::Text nextText;
 
-	Tetromino currentBlock = Tetromino(rand() % 7);
-	Tetromino nextBlock = Tetromino(rand() % 7);
+	Tetromino currentBlock;
+	Tetromino nextBlock;
 
 	std::vector<Mino*> matrix;
 
@@ -28,9 +32,7 @@ class TetrisGame : public GUI
 	};
 	const char tetrominoTypes[7] = { 'L', 'J', 'T', 'O', 'Z', 'S', 'I' };
 
-	sf::RectangleShape backgroundRect;
-	sf::Texture backgroundPicture;
-	sf::Music bgm;
+	std::string bgmFile;
 	sf::Sound moveSound, rotateSound, lineClearSound, tetrisSound, levelUpSound, gameoverSound;
 
 	short level;
@@ -38,27 +40,29 @@ class TetrisGame : public GUI
 	unsigned int lines;
 
 public:
-	TetrisGame();
+	TetrisGame(short level);
 
 	void spawnNextTetromino();
 	short checkLines(short row);
 	void levelUp();
 	unsigned int* gameOver();
+	void setSFXVolume(float volume);
 
 	void downPressed() override;
 	void leftPressed() override;
 	void rightPressed() override;
-	short enterPressed() override;
 	void escPressed() override;
 	void zPressed() override;
 	void xPressed() override;
 
-	void setLevel(short level);
+	bool fadeIn() override;
 
-	unsigned short getFrameRate(short level)
+	unsigned short getCurrentSpeed()
 	{
 		return frameRate[level];
 	}
+
+	std::string getBGMFile() override;
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -3,12 +3,13 @@
 #include "TitleScreen.h"
 #include "Options.h"
 #include "LoadingScreen.h"
+#include "TetrisGame.h"
 
 #include <iostream>
 
 enum class ProgramState
 {
-	MENU, LOAD, GAME, OPTIONS, HIGHSCORE
+	MENU, LOAD, STAND_BY, GAME, OPTIONS, HIGHSCORE
 };
 
 int main()
@@ -23,20 +24,24 @@ int main()
 	currentGUI = &title;
 
 	LoadingScreen loading;
+	TetrisGame *tetrisGameInstance = nullptr;
 
 	sf::Music music;
 	music.openFromFile(title.getMusic());
 	music.setLoopPoints(sf::Music::TimeSpan(sf::seconds(52.646f), sf::seconds(49.180f)));
 	music.play();
 	music.setLoop(true);
+	float musicVolume = 100.f;
 
 	sf::Sound sfx;
 	sfx.setVolume(100.f);
 
-	Options options(&music, &sfx);
-
 	sf::Clock programClock;
 	sf::Clock joyHold;
+
+	short startingLevel;
+
+	volatile unsigned int frameTick = 0;
 
 	volatile unsigned int holdIndex = 0;
 
@@ -56,8 +61,35 @@ int main()
 				if (currentGUI->fadeAway())
 				{
 					programClock.restart();
-					state = ProgramState::GAME;
+					state = ProgramState::STAND_BY;
+					currentGUI = new TetrisGame(startingLevel);
+					tetrisGameInstance = dynamic_cast<TetrisGame*>(currentGUI);
 				}
+			}
+		}
+		else if (state == ProgramState::STAND_BY)
+		{
+			music.setVolume(musicVolume);
+			music.openFromFile(currentGUI->getBGMFile());
+			music.setLoopPoints(sf::Music::TimeSpan(sf::seconds(0), music.getDuration()));
+			music.play();
+
+			if (tetrisGameInstance != nullptr)
+				tetrisGameInstance->setSFXVolume(sfx.getVolume());
+
+			if (currentGUI->fadeIn())
+			{
+				tetrisGameInstance->spawnNextTetromino();
+				state = ProgramState::GAME;
+				programClock.restart();
+			}
+		}
+		else if (state == ProgramState::GAME)
+		{
+			if (programClock.getElapsedTime() >= sf::seconds(tetrisGameInstance->getCurrentSpeed() / 60.f))
+			{
+				tetrisGameInstance->downPressed();
+				programClock.restart();
 			}
 		}
 
@@ -96,12 +128,14 @@ int main()
 							{
 								case 0:
 									state = ProgramState::LOAD;
+									startingLevel = title.getLevelCursor();
 									currentGUI = &loading;
+									musicVolume = music.getVolume();
 									programClock.restart();
 									break;
 								case 1:
 									state = ProgramState::OPTIONS;
-									currentGUI = &options;
+									currentGUI = new Options(&music, &sfx);
 									break;
 								case 2:
 									break;
@@ -109,6 +143,7 @@ int main()
 						}
 						else if (state == ProgramState::OPTIONS && currentGUI->enterPressed())
 						{
+							delete currentGUI;
 							currentGUI = &title;
 							state = ProgramState::MENU;
 						}

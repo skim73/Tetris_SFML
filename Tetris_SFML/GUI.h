@@ -18,4 +18,14 @@ public:
 	{
 		return 0;
 	}
+
+	virtual bool fadeIn()
+	{
+		return 0;
+	}
+
+	virtual std::string getBGMFile()
+	{
+		return "";
+	}
 };

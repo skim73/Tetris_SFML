@@ -23,7 +23,7 @@ Options::Options(sf::Music *music, sf::Sound *sound)
 	musicVolText.setFillColor(sf::Color::Cyan);
 
 	musicSlider.setFillColor(sf::Color::Green);
-	musicSlider.setSize(sf::Vector2f(800.f, 40.f));
+	musicSlider.setSize(sf::Vector2f(bgm->getVolume() * 8.f, 40.f));
 	musicSlider.setPosition(400.f, 270.f);
 
 	sfxVolText = sf::Text("SFX Volume:", square721bt);
@@ -33,7 +33,7 @@ Options::Options(sf::Music *music, sf::Sound *sound)
 	sfxVolText.setFillColor(sf::Color::White);
 
 	sfxSlider.setFillColor(sf::Color::Green);
-	sfxSlider.setSize(sf::Vector2f(800.f, 40.f));
+	sfxSlider.setSize(sf::Vector2f(sfx->getVolume() * 8.f, 40.f));
 	sfxSlider.setPosition(400.f, 420.f);
 
 	backText = sf::Text("BACK", square721bt);

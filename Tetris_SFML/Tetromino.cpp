@@ -1,7 +1,13 @@
 #include "Tetromino.h"
 
+Tetromino::Tetromino()
+{
+	location = Point(0, 4);
+}
+
 Tetromino::Tetromino(char type)
 {
+	location = Point(0, 4);
 	rotation = 0;
 	this->type = type;
 	switch (type)
@@ -52,41 +58,28 @@ Tetromino::Tetromino(char type)
 
 void Tetromino::moveLeft(short x)
 {
+	location = location - Point(0, x);
 	for (Mino *mino : minoes)
 	{
-		mino->setPoint(mino->getPoint() - Point(0, x));
+		mino->setPositionAt(mino->getPoint() + location);
 	}
 }
 
 void Tetromino::moveRight(short x)
 {
+	location = location + Point(0, x);
 	for (Mino *mino : minoes)
 	{
-		mino->setPoint(mino->getPoint() + Point(0, x));
+		mino->setPositionAt(mino->getPoint() + location);
 	}
 }
 
 void Tetromino::moveDown(short y)
 {
+	location = location + Point(y, 0);
 	for (Mino *mino : minoes)
 	{
-		mino->setPoint(mino->getPoint() + Point(y, 0));
-	}
-}
-
-void Tetromino::resetPosition()
-{
-	for (Mino *mino : minoes)
-	{
-		mino->setPoint(0, 0);
-	}
-}
-
-void Tetromino::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	for (Mino *mino : minoes)
-	{
-		target.draw(*mino);
+		mino->setPositionAt(mino->getPoint() + location);
 	}
 }
 
@@ -101,6 +94,7 @@ void Tetromino::rotateLeft()
 			{
 				short r = minoes[i]->getPoint().row, c = minoes[i]->getPoint().col;
 				minoes[i]->setPoint(-c, r);
+				minoes[i]->setPositionAt(minoes[i]->getPoint() + location);
 			}
 			break;
 		case 'Z':
@@ -110,7 +104,8 @@ void Tetromino::rotateLeft()
 			{
 				short r = minoes[i]->getPoint().row, c = minoes[i]->getPoint().col;
 				Point transform = rotation ? Point(-c, r) : Point(c, -r);
-				minoes[i]->setPoint(-c, r);
+				minoes[i]->setPoint(transform.row, transform.col);
+				minoes[i]->setPositionAt(transform + location);
 			}
 			rotation = !rotation;
 	}
@@ -127,6 +122,7 @@ void Tetromino::rotateRight()
 			{
 				short r = minoes[i]->getPoint().row, c = minoes[i]->getPoint().col;
 				minoes[i]->setPoint(c, -r);
+				minoes[i]->setPositionAt(minoes[i]->getPoint() + location);
 			}
 			break;
 		case 'Z':
@@ -136,8 +132,17 @@ void Tetromino::rotateRight()
 			{
 				short r = minoes[i]->getPoint().row, c = minoes[i]->getPoint().col;
 				Point transform = rotation ? Point(-c, r) : Point(c, -r);
-				minoes[i]->setPoint(-c, r);
+				minoes[i]->setPoint(transform.row, transform.col);
+				minoes[i]->setPositionAt(transform + location);
 			}
 			rotation = !rotation;
+	}
+}
+
+void Tetromino::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	for (Mino *mino : minoes)
+	{
+		target.draw(*mino);
 	}
 }

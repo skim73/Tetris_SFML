@@ -7,8 +7,10 @@ class Tetromino : public sf::Drawable
 	std::vector<Mino*> minoes;
 	char type;
 	bool rotation;
+	Point location;
 
 public:
+	Tetromino();
 	Tetromino(char type);
 
 	std::vector<Mino*>& getMinoes()
@@ -16,10 +18,14 @@ public:
 		return minoes;
 	}
 
+	Point getLocation()
+	{
+		return location;
+	}
+
 	void moveLeft(short x);
 	void moveRight(short x);
 	void moveDown(short y);
-	void resetPosition();
 	void rotateLeft();
 	void rotateRight();
 

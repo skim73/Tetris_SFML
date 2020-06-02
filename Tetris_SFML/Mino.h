@@ -26,10 +26,11 @@ class Mino : public sf::Drawable
 
 public:
 	Mino(short r, short c, sf::Color color);
+	~Mino();
 
 	void setColor(sf::Color color);
 	void setPoint(short r, short c);
-	void setPoint(Point p);
+	void setPositionAt(Point p);
 
 	Point getPoint()
 	{
