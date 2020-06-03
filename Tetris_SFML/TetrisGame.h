@@ -33,7 +33,7 @@ class TetrisGame : public GUI
 	const char tetrominoTypes[7] = { 'L', 'J', 'T', 'O', 'Z', 'S', 'I' };
 
 	sf::Music bgm;
-	sf::Sound moveSound, rotateSound, lineClearSound, tetrisSound, levelUpSound, gameoverSound;
+	sf::Sound moveSound, rotateSound, lineClearSound, tetrisSound, levelUpSound;
 
 	short level;
 	unsigned int score;
@@ -42,20 +42,21 @@ class TetrisGame : public GUI
 public:
 	TetrisGame(short level);
 
-	void spawnNextTetromino();
+	bool spawnNextTetromino();
 	short checkLines(short row);
 	void levelUp();
 	unsigned int* gameOver();
 	void setBGMVolume(float volume);
 	void setSFXVolume(float volume);
 
-	void downPressed() override;
+	short downPressed() override;
 	void leftPressed() override;
 	void rightPressed() override;
 	void escPressed() override;
 	void zPressed() override;
 	void xPressed() override;
 
+	bool fadeAway() override;
 	bool fadeIn() override;
 
 	unsigned short getCurrentSpeed()

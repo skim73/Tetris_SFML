@@ -6,7 +6,7 @@ class GUI : public sf::Drawable
 {
 public:
 	virtual void upPressed() { return; }
-	virtual void downPressed() { return; }
+	virtual short downPressed() { return 0; }
 	virtual void leftPressed() { return; }
 	virtual void rightPressed() { return; }
 	virtual short enterPressed() { return 0; }

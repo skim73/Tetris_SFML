@@ -31,10 +31,10 @@ Tetromino::Tetromino(char type)
 			minoes.push_back(new Mino(1, 0, sf::Color::Green));
 			break;
 		case 'O':
-			minoes.push_back(new Mino(0, 0, sf::Color::Blue));
-			minoes.push_back(new Mino(0, 1, sf::Color::Blue));
-			minoes.push_back(new Mino(1, 0, sf::Color::Blue));
-			minoes.push_back(new Mino(1, 1, sf::Color::Blue));
+			minoes.push_back(new Mino(0, 0, sf::Color(0, 100, 255)));
+			minoes.push_back(new Mino(0, 1, sf::Color(0, 100, 255)));
+			minoes.push_back(new Mino(1, 0, sf::Color(0, 100, 255)));
+			minoes.push_back(new Mino(1, 1, sf::Color(0, 100, 255)));
 			break;
 		case 'Z':
 			minoes.push_back(new Mino(0, 0, sf::Color(255, 128, 0)));

@@ -42,7 +42,7 @@ void TitleScreen::upPressed()
 	}
 }
 
-void TitleScreen::downPressed()
+short TitleScreen::downPressed()
 {
 	if (++menuCursor > 2)
 		menuCursor = 2;
@@ -51,6 +51,7 @@ void TitleScreen::downPressed()
 		menuItems[menuCursor - 1].setFillColor(sf::Color::White);
 		menuItems[menuCursor].setFillColor(sf::Color::Cyan);
 	}
+	return 0;
 }
 
 void TitleScreen::rightPressed()

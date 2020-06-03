@@ -23,7 +23,7 @@ public:
 	TitleScreen();
 
 	void upPressed() override;
-	void downPressed() override;
+	short downPressed() override;
 	void leftPressed() override;
 	void rightPressed() override;
 	short enterPressed() override;

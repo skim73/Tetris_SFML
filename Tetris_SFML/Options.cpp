@@ -64,7 +64,7 @@ void Options::upPressed()
 	}
 }
 
-void Options::downPressed()
+short Options::downPressed()
 {
 	if (++cursor > 2)
 		cursor = 2;
@@ -81,6 +81,7 @@ void Options::downPressed()
 				backText.setFillColor(sf::Color::Cyan);
 		}
 	}
+	return 0;
 }
 
 void Options::leftPressed()

@@ -26,7 +26,7 @@ public:
 	Options(sf::Music *music, sf::Sound *sound);
 
 	void upPressed() override;
-	void downPressed() override;
+	short downPressed() override;
 	void leftPressed() override;
 	void rightPressed() override;
 	short enterPressed() override;

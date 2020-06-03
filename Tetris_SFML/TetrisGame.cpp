@@ -80,19 +80,31 @@ TetrisGame::TetrisGame(short level)
 	lines = 0;
 }
 
-void TetrisGame::spawnNextTetromino()
+bool TetrisGame::spawnNextTetromino()
 {
 	currentBlock = nextBlock;
 	currentBlock.moveLeft(14);
+
+	for (Mino *mino : currentBlock.getMinoes())
+	{
+		Point p = mino->getPoint() + currentBlock.getLocation();
+		if (matrix[MATRIX(p.row, p.col)] != nullptr)
+		{
+			return false;
+		}
+	}
+
 	nextBlock = Tetromino(tetrominoTypes[rand() % 7]);
 	nextBlock.moveRight(14);
+
+	return true;
 }
 
 short TetrisGame::checkLines(short row)
 {
 	short lines = 0;
 	std::vector<short> lineRows;
-	for (short r = row; r > row - 4; --r)
+	for (short r = row; r > row - 4 && r >= -2; --r)
 	{
 		int i = 0;
 		while (i < 10)
@@ -130,7 +142,7 @@ short TetrisGame::checkLines(short row)
 				delete matrix[MATRIX(row, 9 - i)];
 				matrix[MATRIX(row, 9 - i)] = nullptr;
 			}
-			for (int j = row - 1; j >= 2; --j)
+			for (int j = row - 1; j >= -1; --j)
 			{
 				for (int k = 0; k < 5; ++k)
 				{
@@ -201,6 +213,16 @@ void TetrisGame::levelUp()
 
 unsigned int* TetrisGame::gameOver()
 {
+	bgm.stop();
+	bgm.openFromFile("music/gameover.ogg");
+	bgm.play();
+	for (Mino *mino : matrix)
+	{
+		if (mino != nullptr)
+		{
+			mino->setColor(sf::Color(128, 128, 128, 255));
+		}
+	}
 	unsigned int *scoreAndLines = new unsigned int[2] { score, lines };
 	return scoreAndLines;
 }
@@ -217,10 +239,9 @@ void TetrisGame::setSFXVolume(float volume)
 	lineClearSound.setVolume(volume);
 	tetrisSound.setVolume(volume);
 	levelUpSound.setVolume(volume);
-	gameoverSound.setVolume(volume);
 }
 
-void TetrisGame::downPressed()
+short TetrisGame::downPressed()
 {
 	bool lock = false;
 	for (Mino *mino : currentBlock.getMinoes())
@@ -251,12 +272,16 @@ void TetrisGame::downPressed()
 		
 		std::cout << "LEVEL " << level << " LINES " << this->lines << std::endl;
 
-		spawnNextTetromino();
+		if (!spawnNextTetromino())
+			return -1;
+
+		return 0;
 	}
 	else
 	{
 		currentBlock.moveDown(1);
 	}
+	return 0;
 }
 
 void TetrisGame::leftPressed()
@@ -322,12 +347,36 @@ void TetrisGame::xPressed()
 	}
 }
 
+bool TetrisGame::fadeAway()
+{
+	sf::Color bgColor = backgroundRect.getFillColor();
+	backgroundRect.setFillColor(sf::Color(bgColor.r, bgColor.g, bgColor.b, bgColor.a - 5));
+	sf::Color matrixColor = matrixPicture.getFillColor();
+	matrixPicture.setFillColor(sf::Color(matrixColor.r, matrixColor.g, matrixColor.b, matrixColor.a - 4));
+	sf::Color nextBlockColor = nextBlockRect.getFillColor();
+	nextBlockRect.setFillColor(sf::Color(nextBlockColor.r, nextBlockColor.g, nextBlockColor.b, nextBlockColor.a - 3));
+	sf::Color nextTextColor = nextText.getFillColor();
+	nextText.setFillColor(sf::Color(nextTextColor.r, nextTextColor.g, nextTextColor.b, nextTextColor.a - 5));
+	for (sf::Sprite &frameMino : frame)
+	{
+		sf::Color minoColor = frameMino.getColor();
+		frameMino.setColor(sf::Color(minoColor.r, minoColor.g, minoColor.b, minoColor.a - 5));
+	}
+
+	if (bgm.getVolume() > 5)
+		bgm.setVolume(bgm.getVolume() - 5.f);
+	else
+		bgm.stop();
+
+	return backgroundRect.getFillColor().a == 0;
+}
+
 bool TetrisGame::fadeIn()
 {
 	sf::Color bgColor = backgroundRect.getFillColor();
 	backgroundRect.setFillColor(sf::Color(bgColor.r, bgColor.g, bgColor.b, bgColor.a + 5));
 	sf::Color matrixColor = matrixPicture.getFillColor();
-	matrixPicture.setFillColor(sf::Color(matrixColor.r, matrixColor.g, matrixColor.b, matrixColor.a + 3));
+	matrixPicture.setFillColor(sf::Color(matrixColor.r, matrixColor.g, matrixColor.b, matrixColor.a + 4));
 	sf::Color nextBlockColor = nextBlockRect.getFillColor();
 	nextBlockRect.setFillColor(sf::Color(nextBlockColor.r, nextBlockColor.g, nextBlockColor.b, nextBlockColor.a + 3));
 	sf::Color nextTextColor = nextText.getFillColor();

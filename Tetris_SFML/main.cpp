@@ -9,7 +9,7 @@
 
 enum class ProgramState
 {
-	MENU, LOAD, STAND_BY, GAME, OPTIONS, HIGHSCORE
+	MENU, LOAD, STAND_BY, GAME, GAME_OVER, QUIT_GAME, OPTIONS, HIGHSCORE
 };
 
 int main()
@@ -23,7 +23,6 @@ int main()
 	TitleScreen title;
 	currentGUI = &title;
 
-	LoadingScreen loading;
 	TetrisGame *tetrisGameInstance = nullptr;
 
 	sf::Music music;
@@ -41,9 +40,7 @@ int main()
 
 	short startingLevel;
 
-	volatile unsigned int frameTick = 0;
-
-	volatile unsigned int holdIndex = 0;
+	unsigned int *results;
 
 	while (window.isOpen())
 	{
@@ -62,6 +59,7 @@ int main()
 				{
 					programClock.restart();
 					state = ProgramState::STAND_BY;
+					delete currentGUI;
 					currentGUI = new TetrisGame(startingLevel);
 					tetrisGameInstance = dynamic_cast<TetrisGame*>(currentGUI);
 				}
@@ -86,15 +84,32 @@ int main()
 		{
 			if (programClock.getElapsedTime() >= sf::seconds(tetrisGameInstance->getCurrentSpeed() / 60.f))
 			{
-				tetrisGameInstance->downPressed();
+				if (tetrisGameInstance->downPressed() == -1)
+				{
+					state = ProgramState::GAME_OVER;
+					results = tetrisGameInstance->gameOver();
+				}
 				programClock.restart();
+			}
+		}
+		else if (state == ProgramState::QUIT_GAME)
+		{
+			if (currentGUI->fadeAway())
+			{
+				state = ProgramState::MENU;
+				delete tetrisGameInstance;
+				tetrisGameInstance = nullptr;
+				currentGUI = &title;
+
+				music.setVolume(musicVolume);
+				music.play();
 			}
 		}
 
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::KeyPressed && ++holdIndex % 2)
+			if (event.type == sf::Event::KeyPressed)
 			{
 				switch (event.key.code)
 				{
@@ -102,7 +117,11 @@ int main()
 						currentGUI->upPressed();
 						break;
 					case sf::Keyboard::Down:
-						currentGUI->downPressed();
+						if (currentGUI->downPressed() == -1)
+						{
+							state = ProgramState::GAME_OVER;
+							results = tetrisGameInstance->gameOver();
+						}
 						break;
 					case sf::Keyboard::Left:
 						currentGUI->leftPressed();
@@ -127,7 +146,7 @@ int main()
 								case 0:
 									state = ProgramState::LOAD;
 									startingLevel = title.getLevelCursor();
-									currentGUI = &loading;
+									currentGUI = new LoadingScreen();
 									musicVolume = music.getVolume();
 									programClock.restart();
 									break;
@@ -139,6 +158,10 @@ int main()
 									break;
 							}
 						}
+						else if (state == ProgramState::GAME_OVER)
+						{
+							state = ProgramState::QUIT_GAME;
+						}
 						else if (state == ProgramState::OPTIONS && currentGUI->enterPressed())
 						{
 							delete currentGUI;
@@ -146,10 +169,6 @@ int main()
 							state = ProgramState::MENU;
 						}
 				}
-			}
-			else if (event.type == sf::Event::KeyReleased)
-			{
-				holdIndex = 0;
 			}
 			else if (event.type == sf::Event::Closed)
 			{
