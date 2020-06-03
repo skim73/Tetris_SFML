@@ -1,5 +1,6 @@
 #include "TetrisGame.h"
 #include <algorithm>
+#include <iostream>
 
 TetrisGame::TetrisGame(short level)
 {
@@ -20,7 +21,7 @@ TetrisGame::TetrisGame(short level)
 	nextText.setFillColor(sf::Color(255, 255, 255, 0));
 
 	nextBlock = Tetromino(tetrominoTypes[rand() % 7]);
-	nextBlock.moveRight(13);
+	nextBlock.moveRight(14);
 
 	sf::Texture frameMinoTexture;
 	frameMinoTexture.loadFromFile("img/mino.png");
@@ -60,27 +61,31 @@ TetrisGame::TetrisGame(short level)
 	backgroundRect.setFillColor(sf::Color(color.r, color.g, color.b, 0));
 
 	if (level <= 2)
-		bgmFile = "music/[Feel It].ogg";
+		bgm.openFromFile("music/[Feel It].ogg");
 	else if (level <= 5)
-		bgmFile = "music/Hi Rollers.ogg";
+		bgm.openFromFile("music/Hi Rollers.ogg");
 	else if (level <= 8)
-		bgmFile = "music/Groove Ride.ogg";
+		bgm.openFromFile("music/Groove Ride.ogg");
 	else if (level <= 11)
-		bgmFile = "music/Born To Funk.ogg";
+		bgm.openFromFile("music/Born To Funk.ogg");
 	else if (level <= 14)
-		bgmFile = "music/Wild One.ogg";
+		bgm.openFromFile("music/Wild One.ogg");
 	else
-		bgmFile = "music/Balearic.ogg";
+		bgm.openFromFile("music/Balearic.ogg");
 
+	bgm.play();
+	bgm.setLoop(true);
 
+	score = 0;
+	lines = 0;
 }
 
 void TetrisGame::spawnNextTetromino()
 {
 	currentBlock = nextBlock;
-	currentBlock.moveLeft(13);
+	currentBlock.moveLeft(14);
 	nextBlock = Tetromino(tetrominoTypes[rand() % 7]);
-	nextBlock.moveRight(13);
+	nextBlock.moveRight(14);
 }
 
 short TetrisGame::checkLines(short row)
@@ -168,19 +173,29 @@ void TetrisGame::levelUp()
 	switch (level)
 	{
 		case 3:
-			bgmFile = "music/Hi Rollers.ogg";
+			bgm.stop();
+			bgm.openFromFile("music/Hi Rollers.ogg");
+			bgm.play();
 			break;
 		case 6:
-			bgmFile = "music/Groove Ride.ogg";
+			bgm.stop();
+			bgm.openFromFile("music/Groove Ride.ogg");
+			bgm.play();
 			break;
 		case 9:
-			bgmFile = "music/Born To Funk.ogg";
+			bgm.stop();
+			bgm.openFromFile("music/Born To Funk.ogg");
+			bgm.play();
 			break;
 		case 12:
-			bgmFile = "music/Wild One.ogg";
+			bgm.stop();
+			bgm.openFromFile("music/Wild One.ogg");
+			bgm.play();
 			break;
 		case 15:
-			bgmFile = "music/Balearic.ogg";
+			bgm.stop();
+			bgm.openFromFile("music/Balearic.ogg");
+			bgm.play();
 	}
 }
 
@@ -188,6 +203,11 @@ unsigned int* TetrisGame::gameOver()
 {
 	unsigned int *scoreAndLines = new unsigned int[2] { score, lines };
 	return scoreAndLines;
+}
+
+void TetrisGame::setBGMVolume(float volume)
+{
+	bgm.setVolume(volume);
 }
 
 void TetrisGame::setSFXVolume(float volume)
@@ -224,10 +244,12 @@ void TetrisGame::downPressed()
 		}
 
 		lines += checkLines(row);
-		if (lines % 10 > level)
+		if (lines / 10 > level)
 		{
 			levelUp();
 		}
+		
+		std::cout << "LEVEL " << level << " LINES " << this->lines << std::endl;
 
 		spawnNextTetromino();
 	}
@@ -315,8 +337,8 @@ bool TetrisGame::fadeIn()
 		sf::Color minoColor = frameMino.getColor();
 		frameMino.setColor(sf::Color(minoColor.r, minoColor.g, minoColor.b, minoColor.a + 5));
 	}
-
-	return bgColor.a >= 255;
+	
+	return backgroundRect.getFillColor().a == 255;
 }
 
 void TetrisGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -336,9 +358,4 @@ void TetrisGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		if (mino != nullptr)
 			target.draw(*mino);
 	}
-}
-
-std::string TetrisGame::getBGMFile()
-{
-	return bgmFile;
 }

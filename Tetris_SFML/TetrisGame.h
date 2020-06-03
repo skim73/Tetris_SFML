@@ -32,7 +32,7 @@ class TetrisGame : public GUI
 	};
 	const char tetrominoTypes[7] = { 'L', 'J', 'T', 'O', 'Z', 'S', 'I' };
 
-	std::string bgmFile;
+	sf::Music bgm;
 	sf::Sound moveSound, rotateSound, lineClearSound, tetrisSound, levelUpSound, gameoverSound;
 
 	short level;
@@ -46,6 +46,7 @@ public:
 	short checkLines(short row);
 	void levelUp();
 	unsigned int* gameOver();
+	void setBGMVolume(float volume);
 	void setSFXVolume(float volume);
 
 	void downPressed() override;
@@ -61,8 +62,6 @@ public:
 	{
 		return frameRate[level];
 	}
-
-	std::string getBGMFile() override;
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -69,13 +69,11 @@ int main()
 		}
 		else if (state == ProgramState::STAND_BY)
 		{
-			music.setVolume(musicVolume);
-			music.openFromFile(currentGUI->getBGMFile());
-			music.setLoopPoints(sf::Music::TimeSpan(sf::seconds(0), music.getDuration()));
-			music.play();
-
 			if (tetrisGameInstance != nullptr)
+			{
+				tetrisGameInstance->setBGMVolume(musicVolume);
 				tetrisGameInstance->setSFXVolume(sfx.getVolume());
+			}
 
 			if (currentGUI->fadeIn())
 			{
