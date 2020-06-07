@@ -7,11 +7,13 @@ This game is far from ready. I only programmed interacting with the main menu.
 The essential game elements are implemented.
 - 6/3/2020
 Game over & returning to main menu.
+- 6/7/2020
+Smoother input of directional keys/buttons.
 
 # Remaining goals
-- Smoother controls when holding down keys
 - Sound effects
 - Displaying level, lines, score
 - High score
 - Pause menu
 - Controller support
+- reducing lags
