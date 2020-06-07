@@ -20,7 +20,7 @@ TetrisGame::TetrisGame(short level)
 	nextText.setPosition(1220.f, 60.f);
 	nextText.setFillColor(sf::Color(255, 255, 255, 0));
 
-	nextBlock = Tetromino(tetrominoTypes[rand() % 7]);
+	nextBlock = Tetromino(tetrominoTypes[randomNumberGenerator() % 7]);
 	nextBlock.moveRight(14);
 
 	sf::Texture frameMinoTexture;
@@ -80,6 +80,15 @@ TetrisGame::TetrisGame(short level)
 	lines = 0;
 }
 
+TetrisGame::~TetrisGame()
+{
+	for (int i = 0; i < 220; ++i)
+	{
+		if (matrix[i])
+			delete matrix[i];
+	}
+}
+
 bool TetrisGame::spawnNextTetromino()
 {
 	currentBlock = nextBlock;
@@ -94,7 +103,7 @@ bool TetrisGame::spawnNextTetromino()
 		}
 	}
 
-	nextBlock = Tetromino(tetrominoTypes[rand() % 7]);
+	nextBlock = Tetromino(tetrominoTypes[randomNumberGenerator() % 7]);
 	nextBlock.moveRight(14);
 
 	return true;
@@ -275,7 +284,7 @@ short TetrisGame::downPressed()
 		if (!spawnNextTetromino())
 			return -1;
 
-		return 0;
+		return 1;
 	}
 	else
 	{
@@ -361,6 +370,13 @@ bool TetrisGame::fadeAway()
 	{
 		sf::Color minoColor = frameMino.getColor();
 		frameMino.setColor(sf::Color(minoColor.r, minoColor.g, minoColor.b, minoColor.a - 5));
+	}
+	for (Mino *mino : matrix)
+	{
+		if (mino == nullptr)
+			continue;
+		sf::Color minoColor = mino->getColor();
+		mino->setColor(sf::Color(minoColor.r, minoColor.g, minoColor.b, minoColor.a - 5));
 	}
 
 	if (bgm.getVolume() > 5)

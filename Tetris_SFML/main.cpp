@@ -4,6 +4,7 @@
 #include "Options.h"
 #include "LoadingScreen.h"
 #include "TetrisGame.h"
+#include "InputManager.h"
 
 #include <iostream>
 
@@ -36,7 +37,6 @@ int main()
 	sfx.setVolume(100.f);
 
 	sf::Clock programClock;
-	sf::Clock joyHold;
 
 	short startingLevel;
 
@@ -106,6 +106,59 @@ int main()
 			}
 		}
 
+		// CHECK FOR INPUTS
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+		{
+			if (InputManager::activateInput(InputManager::upPressed(), true))
+			{
+				currentGUI->upPressed();
+			}
+		}
+		else
+		{
+			InputManager::upReleased();
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+		{
+			if (InputManager::activateInput(InputManager::downPressed(), state != ProgramState::GAME))
+			{
+				if (currentGUI->downPressed() == -1 && state == ProgramState::GAME)
+				{
+					state = ProgramState::GAME_OVER;
+					results = tetrisGameInstance->gameOver();
+				}
+			}
+		}
+		else
+		{
+			InputManager::downReleased();
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+		{
+			if (InputManager::activateInput(InputManager::leftPressed(), true))
+			{
+				currentGUI->leftPressed();
+			}
+		}
+		else
+		{
+			InputManager::leftReleased();
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+		{
+			if (InputManager::activateInput(InputManager::rightPressed(), true))
+			{
+				currentGUI->rightPressed();
+			}
+		}
+		else
+		{
+			InputManager::rightReleased();
+		}
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -113,22 +166,6 @@ int main()
 			{
 				switch (event.key.code)
 				{
-					case sf::Keyboard::Up:
-						currentGUI->upPressed();
-						break;
-					case sf::Keyboard::Down:
-						if (currentGUI->downPressed() == -1)
-						{
-							state = ProgramState::GAME_OVER;
-							results = tetrisGameInstance->gameOver();
-						}
-						break;
-					case sf::Keyboard::Left:
-						currentGUI->leftPressed();
-						break;
-					case sf::Keyboard::Right:
-						currentGUI->rightPressed();
-						break;
 					case sf::Keyboard::Escape:
 						currentGUI->escPressed();
 						break;

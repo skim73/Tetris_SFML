@@ -36,6 +36,10 @@ public:
 	{
 		return point;
 	}
+	sf::Color getColor()
+	{
+		return sprite.getColor();
+	}
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -5,6 +5,7 @@
 #include "GUI.h"
 #include "PauseScreen.h"
 #include <SFML/Audio.hpp>
+#include <random>
 
 #define MATRIX(row, col) ((row+2)*10 + (col))
 
@@ -31,6 +32,7 @@ class TetrisGame : public GUI
 		2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1
 	};
 	const char tetrominoTypes[7] = { 'L', 'J', 'T', 'O', 'Z', 'S', 'I' };
+	std::random_device randomNumberGenerator;
 
 	sf::Music bgm;
 	sf::Sound moveSound, rotateSound, lineClearSound, tetrisSound, levelUpSound;
@@ -41,6 +43,7 @@ class TetrisGame : public GUI
 
 public:
 	TetrisGame(short level);
+	~TetrisGame();
 
 	bool spawnNextTetromino();
 	short checkLines(short row);
