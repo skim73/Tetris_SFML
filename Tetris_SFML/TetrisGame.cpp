@@ -79,6 +79,16 @@ TetrisGame::TetrisGame(short level)
 	score = 0;
 	lines = 0;
 
+	scoreRect.setSize(sf::Vector2f(300.f, 300.f));
+	scoreRect.setPosition(150.f, 150.f);
+	scoreRect.setFillColor(sf::Color(0, 0, 0, 200));
+	scoreText = sf::Text("SCORE: \n0", square721bt, 35);
+	scoreText.setPosition(175.f, 175.f);
+	levelText = sf::Text("LEVEL: \n" + std::to_string(level), square721bt, 35);
+	levelText.setPosition(175.f, 265.f);
+	linesText = sf::Text("LINES: \n0", square721bt, 35);
+	linesText.setPosition(175.f, 355.f);
+
 	delayBetweenLockAndNext = 0;
 	minoNum = 0;
 }
@@ -134,13 +144,23 @@ short TetrisGame::checkLines(short row)
 
 	if (lines)
 	{
-		if (lines == 4)
+		switch (lines)
 		{
-			tetrisSound.play();
-		}
-		else
-		{
-			lineClearSound.play();
+			case 1:
+				lineClearSound.play();
+				updateScore(40 * (level + 1));
+				break;
+			case 2:
+				lineClearSound.play();
+				updateScore(100 * (level + 1));
+				break;
+			case 3:
+				lineClearSound.play();
+				updateScore(300 * (level + 1));
+				break;
+			case 4:
+				tetrisSound.play();
+				updateScore(1200 * (level + 1));
 		}
 
 		while (!lineRows.empty())
@@ -222,6 +242,8 @@ void TetrisGame::levelUp()
 				bgm.play();
 		}
 	}
+
+	levelText.setString("LEVEL: \n" + std::to_string(level));
 }
 
 unsigned int* TetrisGame::gameOver()
@@ -254,6 +276,16 @@ void TetrisGame::setSFXVolume(float volume)
 	levelUpSound.setVolume(volume);
 }
 
+void TetrisGame::updateScore(unsigned int delta)
+{
+	if (score + delta < UINT32_MAX)
+		score += delta;
+	else
+		score = UINT32_MAX;
+
+	scoreText.setString("SCORE: \n" + std::to_string(score));
+}
+
 short TetrisGame::downPressed()
 {
 	bool lock = false;
@@ -283,6 +315,7 @@ short TetrisGame::downPressed()
 		}
 
 		lines += checkLines(row);
+		linesText.setString("LINES: \n" + std::to_string(lines));
 		if (lines / 10 > level)
 		{
 			levelUp();
@@ -422,6 +455,10 @@ void TetrisGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(matrixPicture);
 	target.draw(nextBlockRect);
 	target.draw(nextText);
+	target.draw(scoreRect);
+	target.draw(scoreText);
+	target.draw(levelText);
+	target.draw(linesText);
 	for (sf::Sprite frameMino : frame)
 	{
 		target.draw(frameMino);

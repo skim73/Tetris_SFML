@@ -87,7 +87,7 @@ int main()
 		}
 		else if (state == ProgramState::GAME)
 		{
-			inputRate = 40 - (tetrisGameInstance->getMinoNum() / 50) * 4;
+			inputRate = 40 - (tetrisGameInstance->getMinoNum() / 38) * 4;
 
 			if (programClock.getElapsedTime() >= sf::seconds(tetrisGameInstance->getCurrentSpeed() / 60.f))
 			{
@@ -131,7 +131,8 @@ int main()
 		{
 			unsigned int downButtonRate = state == ProgramState::GAME ? inputRate/2 : inputRate;
 
-			if (!downButtonHeld && InputManager::activateInput(InputManager::downPressed(), downButtonRate, state != ProgramState::GAME))
+			if (!downButtonHeld && 
+				InputManager::activateInput(InputManager::downPressed(), downButtonRate, state != ProgramState::GAME))
 			{
 				short status = currentGUI->downPressed();
 				if (status == 1)
@@ -145,6 +146,9 @@ int main()
 					state = ProgramState::GAME_OVER;
 					results = tetrisGameInstance->gameOver();
 				}
+
+				if (tetrisGameInstance)
+					tetrisGameInstance->updateScore(1);
 			}
 		}
 		else

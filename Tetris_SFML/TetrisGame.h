@@ -35,6 +35,9 @@ class TetrisGame : public GUI
 	sf::Music bgm;
 	sf::Sound moveSound, rotateSound, lineClearSound, tetrisSound, levelUpSound;
 
+	sf::RectangleShape scoreRect;
+	sf::Text scoreText, levelText, linesText;
+
 	short level;
 	unsigned int score;
 	unsigned int lines;
@@ -53,6 +56,7 @@ public:
 	unsigned int* gameOver();
 	void setBGMVolume(float volume);
 	void setSFXVolume(float volume);
+	void updateScore(unsigned int delta);
 
 	short downPressed() override;
 	void leftPressed() override;
