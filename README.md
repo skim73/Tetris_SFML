@@ -12,10 +12,10 @@ Smoother input of directional keys/buttons.
 - 6/9/2020
 Dealing with noticeable lags from program heap memory holding more Tetromino data.
 Slight delay between locking Tetromino and spawning next Tetromino added.
+SCOREBOARD!
 
 # Remaining goals
 - Sound effects
-- Displaying level, lines, score
 - High score
 - Pause menu
 - Controller support
