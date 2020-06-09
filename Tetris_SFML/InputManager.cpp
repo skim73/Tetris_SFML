@@ -5,10 +5,6 @@ volatile unsigned int InputManager::upHold = 0,
 					  InputManager::downHold = 0, 
 					  InputManager::leftHold = 0,
 					  InputManager::rightHold = 0;
-bool InputManager::enterHold = 0,
-	 InputManager::escHold = 0,
-	 InputManager::zHold = 0,
-	 InputManager::xHold = 0;
 
 unsigned int InputManager::upPressed()
 {
@@ -59,9 +55,9 @@ void InputManager::rightReleased()
 }
 
 
-bool InputManager::activateInput(unsigned int val, bool delayBetweenFirstPress)
+bool InputManager::activateInput(unsigned int val, unsigned int rate, bool delayBetweenFirstPress)
 {
 	if (delayBetweenFirstPress)
-		return ((val < 50) || (val > 200)) && !(val % 50 - 1);
-	return !(val % 50 - 1);
+		return ((val < rate) || (val > rate*3)) && !(val % rate - 1);
+	return !(val % rate - 1);
 }

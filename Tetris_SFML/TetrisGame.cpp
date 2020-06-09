@@ -278,8 +278,6 @@ short TetrisGame::downPressed()
 		{
 			levelUp();
 		}
-		
-		std::cout << "LEVEL " << level << " LINES " << this->lines << std::endl;
 
 		if (!spawnNextTetromino())
 			return -1;

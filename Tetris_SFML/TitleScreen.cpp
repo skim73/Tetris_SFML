@@ -58,8 +58,8 @@ void TitleScreen::rightPressed()
 {
 	if (menuCursor)
 		return;
-	if (++levelCursor > 30)
-		levelCursor = 30;
+	if (++levelCursor > 20)
+		levelCursor = 20;
 	menuItems[0].setString("START : at level " + std::to_string(levelCursor));
 }
 

@@ -42,6 +42,8 @@ int main()
 
 	unsigned int *results;
 
+	bool downButtonHeld = false;
+
 	while (window.isOpen())
 	{
 		window.clear();
@@ -84,6 +86,7 @@ int main()
 		{
 			if (programClock.getElapsedTime() >= sf::seconds(tetrisGameInstance->getCurrentSpeed() / 60.f))
 			{
+				downButtonHeld = false;
 				if (tetrisGameInstance->downPressed() == -1)
 				{
 					state = ProgramState::GAME_OVER;
@@ -109,7 +112,7 @@ int main()
 		// CHECK FOR INPUTS
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
 		{
-			if (InputManager::activateInput(InputManager::upPressed(), true))
+			if (InputManager::activateInput(InputManager::upPressed(), 40, true))
 			{
 				currentGUI->upPressed();
 			}
@@ -121,9 +124,18 @@ int main()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
 		{
-			if (InputManager::activateInput(InputManager::downPressed(), state != ProgramState::GAME))
+			unsigned int downButtonRate = state == ProgramState::GAME ? 20 : 40;
+
+			if (!downButtonHeld && InputManager::activateInput(InputManager::downPressed(), downButtonRate, state != ProgramState::GAME))
 			{
-				if (currentGUI->downPressed() == -1 && state == ProgramState::GAME)
+				short status = currentGUI->downPressed();
+				if (status == 1)
+				{
+					InputManager::downReleased();
+					downButtonHeld = true;
+					programClock.restart();
+				}
+				else if (status == -1 && state == ProgramState::GAME)
 				{
 					state = ProgramState::GAME_OVER;
 					results = tetrisGameInstance->gameOver();
@@ -133,11 +145,12 @@ int main()
 		else
 		{
 			InputManager::downReleased();
+			downButtonHeld = false;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
 		{
-			if (InputManager::activateInput(InputManager::leftPressed(), true))
+			if (InputManager::activateInput(InputManager::leftPressed(), 40, true))
 			{
 				currentGUI->leftPressed();
 			}
@@ -149,7 +162,7 @@ int main()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
 		{
-			if (InputManager::activateInput(InputManager::rightPressed(), true))
+			if (InputManager::activateInput(InputManager::rightPressed(), 40, true))
 			{
 				currentGUI->rightPressed();
 			}

@@ -26,10 +26,9 @@ class TetrisGame : public GUI
 
 	std::vector<Mino*> matrix;
 
-	const unsigned short frameRate[31] = {
+	const unsigned short frameRate[21] = {
 		48, 43, 38, 33, 28, 23, 18, 13, 8, 6,
-		5, 5, 5, 4, 4, 4, 3, 3, 3, 2,
-		2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1
+		5, 5, 5, 4, 4, 4, 3, 3, 3, 2, 2
 	};
 	const char tetrominoTypes[7] = { 'L', 'J', 'T', 'O', 'Z', 'S', 'I' };
 	std::random_device randomNumberGenerator;
