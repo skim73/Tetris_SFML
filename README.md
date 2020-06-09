@@ -9,6 +9,9 @@ The essential game elements are implemented.
 Game over & returning to main menu.
 - 6/7/2020
 Smoother input of directional keys/buttons.
+- 6/9/2020
+Dealing with noticeable lags from program heap memory holding more Tetromino data.
+Slight delay between locking Tetromino and spawning next Tetromino added.
 
 # Remaining goals
 - Sound effects
@@ -16,4 +19,3 @@ Smoother input of directional keys/buttons.
 - High score
 - Pause menu
 - Controller support
-- reducing lags
