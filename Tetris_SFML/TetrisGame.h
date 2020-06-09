@@ -1,5 +1,4 @@
 #pragma once
-#include <cstdlib>
 #include "Tetromino.h"
 #include "Mino.h"
 #include "GUI.h"
@@ -40,6 +39,10 @@ class TetrisGame : public GUI
 	unsigned int score;
 	unsigned int lines;
 
+	short delayBetweenLockAndNext;
+
+	short minoNum;
+
 public:
 	TetrisGame(short level);
 	~TetrisGame();
@@ -64,6 +67,10 @@ public:
 	unsigned short getCurrentSpeed()
 	{
 		return frameRate[level];
+	}
+	short getMinoNum()
+	{
+		return minoNum;
 	}
 
 private:

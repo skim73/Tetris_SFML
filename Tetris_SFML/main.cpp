@@ -43,6 +43,9 @@ int main()
 	unsigned int *results;
 
 	bool downButtonHeld = false;
+	bool leftButtonHeld = false;
+	bool rightButtonHeld = false;
+	unsigned int inputRate = 40;
 
 	while (window.isOpen())
 	{
@@ -84,6 +87,8 @@ int main()
 		}
 		else if (state == ProgramState::GAME)
 		{
+			inputRate = 40 - (tetrisGameInstance->getMinoNum() / 50) * 4;
+
 			if (programClock.getElapsedTime() >= sf::seconds(tetrisGameInstance->getCurrentSpeed() / 60.f))
 			{
 				downButtonHeld = false;
@@ -112,7 +117,7 @@ int main()
 		// CHECK FOR INPUTS
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
 		{
-			if (InputManager::activateInput(InputManager::upPressed(), 40, true))
+			if (InputManager::activateInput(InputManager::upPressed(), inputRate, true))
 			{
 				currentGUI->upPressed();
 			}
@@ -124,7 +129,7 @@ int main()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
 		{
-			unsigned int downButtonRate = state == ProgramState::GAME ? 20 : 40;
+			unsigned int downButtonRate = state == ProgramState::GAME ? inputRate/2 : inputRate;
 
 			if (!downButtonHeld && InputManager::activateInput(InputManager::downPressed(), downButtonRate, state != ProgramState::GAME))
 			{
@@ -150,26 +155,32 @@ int main()
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
 		{
-			if (InputManager::activateInput(InputManager::leftPressed(), 40, true))
+			if (!rightButtonHeld && InputManager::activateInput(InputManager::leftPressed(), inputRate, true))
 			{
+				leftButtonHeld = true;
+				InputManager::rightReleased();
 				currentGUI->leftPressed();
 			}
 		}
 		else
 		{
 			InputManager::leftReleased();
+			leftButtonHeld = false;
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
 		{
-			if (InputManager::activateInput(InputManager::rightPressed(), 40, true))
+			if (!leftButtonHeld && InputManager::activateInput(InputManager::rightPressed(), inputRate, true))
 			{
+				rightButtonHeld = true;
+				InputManager::leftReleased();
 				currentGUI->rightPressed();
 			}
 		}
 		else
 		{
 			InputManager::rightReleased();
+			rightButtonHeld = false;
 		}
 
 		sf::Event event;

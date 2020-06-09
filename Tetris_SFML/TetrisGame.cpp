@@ -78,6 +78,9 @@ TetrisGame::TetrisGame(short level)
 
 	score = 0;
 	lines = 0;
+
+	delayBetweenLockAndNext = 0;
+	minoNum = 0;
 }
 
 TetrisGame::~TetrisGame()
@@ -172,6 +175,9 @@ short TetrisGame::checkLines(short row)
 			}
 		}
 	}
+
+	minoNum -= 10 * lines;
+
 	return lines;
 }
 
@@ -179,44 +185,42 @@ void TetrisGame::levelUp()
 {
 	levelUpSound.play();
 
-	++level;
-	std::string levelNumber;
-	if (level >= 15)
-		levelNumber = "15";
-	else
+	if (++level <= 15)
 	{
+		std::string levelNumber;
 		if (level / 10)
 			levelNumber.push_back('1');
 		levelNumber.push_back('0' + level % 10);
-	}
-	backgroundPicture.loadFromFile("img/backgrounds/level" + levelNumber + ".png");
 
-	switch (level)
-	{
-		case 3:
-			bgm.stop();
-			bgm.openFromFile("music/Hi Rollers.ogg");
-			bgm.play();
-			break;
-		case 6:
-			bgm.stop();
-			bgm.openFromFile("music/Groove Ride.ogg");
-			bgm.play();
-			break;
-		case 9:
-			bgm.stop();
-			bgm.openFromFile("music/Born To Funk.ogg");
-			bgm.play();
-			break;
-		case 12:
-			bgm.stop();
-			bgm.openFromFile("music/Wild One.ogg");
-			bgm.play();
-			break;
-		case 15:
-			bgm.stop();
-			bgm.openFromFile("music/Balearic.ogg");
-			bgm.play();
+		backgroundPicture.loadFromFile("img/backgrounds/level" + levelNumber + ".png");
+
+		switch (level)
+		{
+			case 3:
+				bgm.stop();
+				bgm.openFromFile("music/Hi Rollers.ogg");
+				bgm.play();
+				break;
+			case 6:
+				bgm.stop();
+				bgm.openFromFile("music/Groove Ride.ogg");
+				bgm.play();
+				break;
+			case 9:
+				bgm.stop();
+				bgm.openFromFile("music/Born To Funk.ogg");
+				bgm.play();
+				break;
+			case 12:
+				bgm.stop();
+				bgm.openFromFile("music/Wild One.ogg");
+				bgm.play();
+				break;
+			case 15:
+				bgm.stop();
+				bgm.openFromFile("music/Balearic.ogg");
+				bgm.play();
+		}
 	}
 }
 
@@ -265,6 +269,11 @@ short TetrisGame::downPressed()
 
 	if (lock)
 	{
+		if (++delayBetweenLockAndNext < 1 + (frameRate[level] < 20) + (frameRate[level] < 5))
+			return 0;
+
+		delayBetweenLockAndNext = 0;
+
 		short row = currentBlock.getLocation().row;
 		for (Mino *mino : currentBlock.getMinoes())
 		{
@@ -279,6 +288,8 @@ short TetrisGame::downPressed()
 			levelUp();
 		}
 
+		minoNum += 4;
+
 		if (!spawnNextTetromino())
 			return -1;
 
@@ -286,6 +297,7 @@ short TetrisGame::downPressed()
 	}
 	else
 	{
+		delayBetweenLockAndNext = 0;
 		currentBlock.moveDown(1);
 	}
 	return 0;
