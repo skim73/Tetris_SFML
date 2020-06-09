@@ -10,7 +10,7 @@
 
 enum class ProgramState
 {
-	MENU, LOAD, STAND_BY, GAME, GAME_OVER, QUIT_GAME, OPTIONS, HIGHSCORE
+	MENU, LOAD, STAND_BY, GAME, GAME_OVER, PAUSE, QUIT_GAME, OPTIONS, HIGHSCORE
 };
 
 int main()
@@ -196,6 +196,17 @@ int main()
 				{
 					case sf::Keyboard::Escape:
 						currentGUI->escPressed();
+						if (state == ProgramState::GAME)
+						{
+							state = ProgramState::PAUSE;
+							currentGUI = new PauseScreen();
+						}
+						else if (state == ProgramState::PAUSE)
+						{
+							state = ProgramState::GAME;
+							delete currentGUI;
+							currentGUI = tetrisGameInstance;
+						}
 						break;
 					case sf::Keyboard::Z:
 						currentGUI->zPressed();
