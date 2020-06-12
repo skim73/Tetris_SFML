@@ -3,7 +3,7 @@
 HighScores::HighScores()
 {
 	backgroundRect.setSize(sf::Vector2f(1600.f, 900.f));
-	bgImage.loadFromFile("img/highscore.png");
+	bgImage.loadFromFile("img/backgrounds/highscore.png");
 	backgroundRect.setTexture(&bgImage);
 
 	scoresRect.setSize(sf::Vector2f(1000.f, 600.f));
