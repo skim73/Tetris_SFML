@@ -120,10 +120,10 @@ int main()
 				{
 					state = ProgramState::ENTER_NAME;
 					std::cout << "\nYou ranked in the top 5 high scores! Enter your name below!" << std::endl;
-					std::cout << "PLEASE: No spaces and at most 24 characters!" << std::endl;
+					std::cout << "PLEASE: No spaces and at most 20 characters!" << std::endl;
 					std::cin >> playerName;
-					if (playerName.size() > 24)
-						playerName = playerName.substr(0, 24);
+					if (playerName.size() > 20)
+						playerName = playerName.substr(0, 20);
 
 					hiScoreScreen.updateHighScores(playerName, results[0], results[1], rank - 1);
 					delete results;
