@@ -10,7 +10,6 @@ public:
 	virtual void leftPressed() { return; }
 	virtual void rightPressed() { return; }
 	virtual short enterPressed() { return 0; }
-	virtual void escPressed() { return; }
 	virtual void zPressed() { return; }
 	virtual void xPressed() { return; }
 

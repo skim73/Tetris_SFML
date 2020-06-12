@@ -46,6 +46,8 @@ class TetrisGame : public GUI
 
 	short minoNum;
 
+	sf::Text hiddenMessage;
+
 public:
 	TetrisGame(short level);
 	~TetrisGame();
@@ -61,7 +63,6 @@ public:
 	short downPressed() override;
 	void leftPressed() override;
 	void rightPressed() override;
-	void escPressed() override;
 	void zPressed() override;
 	void xPressed() override;
 

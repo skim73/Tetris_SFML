@@ -91,6 +91,12 @@ TetrisGame::TetrisGame(short level)
 
 	delayBetweenLockAndNext = 0;
 	minoNum = 0;
+
+	hiddenMessage = sf::Text("If you are still seeing this message on top of the black faded\n"
+							 "background after GAME OVER, head over to the terminal for\n"
+							 "instructions", square721bt);
+	hiddenMessage.setPosition(0.f, 450.f);
+	hiddenMessage.setFillColor(sf::Color(255, 255, 0, 0));
 }
 
 TetrisGame::~TetrisGame()
@@ -364,11 +370,6 @@ void TetrisGame::rightPressed()
 	currentBlock.moveRight(1);
 }
 
-void TetrisGame::escPressed()
-{
-
-}
-
 void TetrisGame::zPressed()
 {
 	currentBlock.rotateLeft();
@@ -422,6 +423,8 @@ bool TetrisGame::fadeAway()
 		mino->setColor(sf::Color(minoColor.r, minoColor.g, minoColor.b, minoColor.a - 5));
 	}
 
+	hiddenMessage.setFillColor(sf::Color(255, 255, 0, 255));
+
 	if (bgm.getVolume() > 5)
 		bgm.setVolume(bgm.getVolume() - 5.f);
 	else
@@ -470,4 +473,5 @@ void TetrisGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		if (mino != nullptr)
 			target.draw(*mino);
 	}
+	target.draw(hiddenMessage);
 }

@@ -5,12 +5,13 @@
 #include "LoadingScreen.h"
 #include "TetrisGame.h"
 #include "InputManager.h"
+#include "HighScores.h"
 
 #include <iostream>
 
 enum class ProgramState
 {
-	MENU, LOAD, STAND_BY, GAME, GAME_OVER, PAUSE, QUIT_GAME, OPTIONS, HIGHSCORE
+	MENU, LOAD, STAND_BY, GAME, GAME_OVER, PAUSE, QUIT_GAME, ENTER_NAME, OPTIONS, HIGHSCORE
 };
 
 int main()
@@ -26,6 +27,9 @@ int main()
 
 	TetrisGame *tetrisGameInstance = nullptr;
 
+	sf::Font square721bt;
+	square721bt.loadFromFile("Square-721-BT.ttf");
+
 	sf::Music music;
 	music.openFromFile(title.getMusic());
 	music.setLoopPoints(sf::Music::TimeSpan(sf::seconds(52.646f), sf::seconds(49.180f)));
@@ -40,12 +44,15 @@ int main()
 
 	short startingLevel;
 
-	unsigned int *results;
+	unsigned int *results = nullptr;
 
 	bool downButtonHeld = false;
 	bool leftButtonHeld = false;
 	bool rightButtonHeld = false;
 	unsigned int inputRate = 40;
+
+	HighScores hiScoreScreen;
+	std::string playerName;
 
 	while (window.isOpen())
 	{
@@ -104,11 +111,27 @@ int main()
 		{
 			if (currentGUI->fadeAway())
 			{
-				state = ProgramState::MENU;
 				delete tetrisGameInstance;
 				tetrisGameInstance = nullptr;
-				currentGUI = &title;
+				currentGUI = nullptr;
 
+				short rank = hiScoreScreen.determineRank(results[0]);
+				if (rank < 6)
+				{
+					state = ProgramState::ENTER_NAME;
+					std::cout << "\nYou ranked in the top 5 high scores! Enter your name below!" << std::endl;
+					std::cout << "PLEASE: No spaces and at most 24 characters!" << std::endl;
+					std::cin >> playerName;
+					if (playerName.size() > 24)
+						playerName = playerName.substr(0, 24);
+
+					hiScoreScreen.updateHighScores(playerName, results[0], results[1], rank - 1);
+					delete results;
+					results = nullptr;
+				}
+
+				state = ProgramState::MENU;
+				currentGUI = &title;
 				music.setVolume(musicVolume);
 				music.play();
 			}
@@ -147,7 +170,7 @@ int main()
 					results = tetrisGameInstance->gameOver();
 				}
 
-				if (tetrisGameInstance)
+				if (tetrisGameInstance && state == ProgramState::GAME)
 					tetrisGameInstance->updateScore(1);
 			}
 		}
@@ -195,7 +218,6 @@ int main()
 				switch (event.key.code)
 				{
 					case sf::Keyboard::Escape:
-						currentGUI->escPressed();
 						if (state == ProgramState::GAME)
 						{
 							state = ProgramState::PAUSE;
@@ -206,6 +228,16 @@ int main()
 							state = ProgramState::GAME;
 							delete currentGUI;
 							currentGUI = tetrisGameInstance;
+						}
+						else if (state == ProgramState::HIGHSCORE)
+						{
+							state = ProgramState::MENU;
+							currentGUI = &title;
+
+							music.openFromFile(title.getMusic());
+							music.setLoopPoints(sf::Music::TimeSpan(sf::seconds(52.646f), sf::seconds(49.180f)));
+							music.play();
+							music.setLoop(true);
 						}
 						break;
 					case sf::Keyboard::Z:
@@ -231,6 +263,12 @@ int main()
 									currentGUI = new Options(&music, &sfx);
 									break;
 								case 2:
+									state = ProgramState::HIGHSCORE;
+									currentGUI = &hiScoreScreen;
+									music.stop();
+									music.openFromFile("music/Tetris X BGM 12 (Title).ogg");
+									music.setLoop(false);
+									music.play();
 									break;
 							}
 						}
