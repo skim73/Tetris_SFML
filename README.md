@@ -9,6 +9,7 @@ Go to "release" tab and download the asset zip file "Tetris_SFML.v0.1-beta.zip"
 - X: rotate clockwise
 - Enter: confirm (on menus)
 - ESC: pause (in game)
+- BTW, the terminal is the small black window looking like command prompt that appears along with the game.
 
 # Remaining goals
 - Sound effects
