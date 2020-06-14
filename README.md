@@ -2,7 +2,7 @@
 Creating the classic version of Tetris game with SFML 2.5.1 in C++
 
 # How to play
-Go to "release" tab and download the asset zip file "Tetris_SFML.v0.1-beta.zip"
+- 6/14/2020: The release has been deleted due to concerns regarding using music from Pacer Test. I will reupload the release with free music.
 - Left/Right Keys : move Tetromino left/right
 - Down Key: accelerate Tetromino down
 - Z: rotate counterclockwise
