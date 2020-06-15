@@ -104,7 +104,10 @@ TetrisGame::~TetrisGame()
 	for (int i = 0; i < 220; ++i)
 	{
 		if (matrix[i])
+		{
 			delete matrix[i];
+			matrix[i] = nullptr;
+		}
 	}
 }
 
@@ -470,7 +473,7 @@ void TetrisGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(nextBlock);
 	for (Mino *mino : matrix)
 	{
-		if (mino != nullptr)
+		if (mino)
 			target.draw(*mino);
 	}
 	target.draw(hiddenMessage);

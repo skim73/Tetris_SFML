@@ -126,14 +126,14 @@ int main()
 						playerName = playerName.substr(0, 20);
 
 					hiScoreScreen.updateHighScores(playerName, results[0], results[1], rank - 1);
-					delete results;
-					results = nullptr;
 				}
 
 				state = ProgramState::MENU;
 				currentGUI = &title;
 				music.setVolume(musicVolume);
 				music.play();
+				delete results;
+				results = nullptr;
 			}
 		}
 

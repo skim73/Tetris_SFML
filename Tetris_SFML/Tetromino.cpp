@@ -1,4 +1,5 @@
 #include "Tetromino.h"
+#include <iostream>
 
 Tetromino::Tetromino()
 {
@@ -141,8 +142,8 @@ void Tetromino::rotateRight()
 
 void Tetromino::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	for (Mino *mino : minoes)
+	for (int i = 0; i < minoes.size(); ++i)
 	{
-		target.draw(*mino);
+		target.draw(*minoes[i]);
 	}
 }
