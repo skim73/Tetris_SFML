@@ -61,17 +61,17 @@ TetrisGame::TetrisGame(short level)
 	backgroundRect.setFillColor(sf::Color(color.r, color.g, color.b, 0));
 
 	if (level <= 2)
-		bgm.openFromFile("music/[Feel It].ogg");
+		bgm.openFromFile("music/Tobu & Itro - Sunburst.ogg");
 	else if (level <= 5)
-		bgm.openFromFile("music/Hi Rollers.ogg");
+		bgm.openFromFile("music/Elektronomia - Energy.ogg");
 	else if (level <= 8)
-		bgm.openFromFile("music/Groove Ride.ogg");
+		bgm.openFromFile("music/Jim Yosef - Link.ogg");
 	else if (level <= 11)
-		bgm.openFromFile("music/Born To Funk.ogg");
+		bgm.openFromFile("music/Tobu - Hope.ogg");
 	else if (level <= 14)
-		bgm.openFromFile("music/Wild One.ogg");
+		bgm.openFromFile("music/Elektronomia - The Other Side.ogg");
 	else
-		bgm.openFromFile("music/Balearic.ogg");
+		bgm.openFromFile("music/TheFatRat - Unity.ogg");
 
 	bgm.play();
 	bgm.setLoop(true);
@@ -224,27 +224,27 @@ void TetrisGame::levelUp()
 		{
 			case 3:
 				bgm.stop();
-				bgm.openFromFile("music/Hi Rollers.ogg");
+				bgm.openFromFile("music/Elektronomia - Energy.ogg");
 				bgm.play();
 				break;
 			case 6:
 				bgm.stop();
-				bgm.openFromFile("music/Groove Ride.ogg");
+				bgm.openFromFile("music/Jim Yosef - Link.ogg");
 				bgm.play();
 				break;
 			case 9:
 				bgm.stop();
-				bgm.openFromFile("music/Born To Funk.ogg");
+				bgm.openFromFile("music/Tobu - Hope.ogg");
 				bgm.play();
 				break;
 			case 12:
 				bgm.stop();
-				bgm.openFromFile("music/Wild One.ogg");
+				bgm.openFromFile("music/Elektronomia - The Other Side.ogg");
 				bgm.play();
 				break;
 			case 15:
 				bgm.stop();
-				bgm.openFromFile("music/Balearic.ogg");
+				bgm.openFromFile("music/TheFatRat - Unity.ogg");
 				bgm.play();
 		}
 	}
@@ -270,7 +270,7 @@ unsigned int* TetrisGame::gameOver()
 
 void TetrisGame::setBGMVolume(float volume)
 {
-	bgm.setVolume(volume);
+	bgm.setVolume(volume * .8f);
 }
 
 void TetrisGame::setSFXVolume(float volume)
