@@ -24,6 +24,26 @@ Creating the classic version of Tetris game with SFML 2.5.1 in C++
 - Levels 12 - 14: Elektronomia - "The Other Side" (NoCopyrightMusic)
 - Levels 15+: TheFatRat - "Unity"
 
+# Image credits
+- Title: http://www.baltana.com/world/red-square-moscow-hd-desktop-wallpaper-23933.html
+- Level 0: http://www.kotech-eg.com/default.aspx?id=160
+- Level 1: https://www.dallaspackingservice.com/garage-cleaning
+- Level 2: https://www.getbellhops.com/blog/best-neighborhoods-for-families-in-seattle/
+- Level 3: https://hipwallpaper.com/playground-wallpapers/
+- Level 4: https://recsports.usc.edu/rec-facilities/other-facilities-courts-fields/outdoor-basketball-courts/
+- Level 5: https://www.ci.staunton.va.us/departments/parks-recreation/community-pools
+- Level 6: https://www.pinterest.com/pin/699957967062636068/
+- Level 7: https://www.telegraph.co.uk/health-fitness/body/create-perfect-home-gym/
+- Level 8: https://www.architectmagazine.com/project-gallery/georgia-tech-krone-engineered-biosystems-building_o
+- Level 9: https://www.retail-insider.com/retail-insider/2020/3/why-covid-19-will-change-the-food-industry-forever
+- Level 10: https://www.cntraveler.com/gallery/best-restaurants-in-toronto
+- Level 11: https://www.glassdoor.com/Photos/Vans-Office-Photos-IMG259667.htm
+- Level 12: https://www.mylondon.news/news/west-london-news/london-underground-stunning-new-trains-16972897
+- Level 13: http://theravenloungeandrestaurant.com/what-is-the-difference-between-a-bar-and-a-nightclub/
+- Level 14: https://www.billboard.com/articles/news/dance/6866087/hakkasan-group-2016-las-vegas-residents
+- Level 15+: https://blog.casinolasvegas.com/strip/exciting-developments-las-vegas-2018/
+- Pause Menu: https://1-800-ghost-dance.tumblr.com/image/113705699165
+
 # Remaining goals
 - Sound effects
 - Controller support
