@@ -43,7 +43,3 @@ Creating the classic version of Tetris game with SFML 2.5.1 in C++
 - Level 14: https://www.billboard.com/articles/news/dance/6866087/hakkasan-group-2016-las-vegas-residents
 - Level 15+: https://blog.casinolasvegas.com/strip/exciting-developments-las-vegas-2018/
 - Pause Menu: https://1-800-ghost-dance.tumblr.com/image/113705699165
-
-# Remaining goals
-- Sound effects
-- Controller support
